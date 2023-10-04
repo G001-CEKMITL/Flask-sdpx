@@ -23,7 +23,7 @@ pipeline{
             steps{
                 echo 'testing the project'
                 sh 'python3 -m unittest discover -s . -p "*_test.py -v"'
-                sh 'robot test.robot'
+                sh 'python3 -m robot test.robot'
             }
         }
         stage('push'){
