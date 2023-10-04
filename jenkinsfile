@@ -4,7 +4,7 @@ pipeline{
     stages{
         stage('build'){
             agent {
-                label 'pre-prod'
+                label 'test'
             }
             steps{
                 echo 'building the project'
@@ -18,44 +18,46 @@ pipeline{
         }
         stage('test'){
             agent {
-                label 'pre-prod'
+                label 'test'
             }
             steps{
                 echo 'testing the project'
                 sh 'python3 -m unittest discover -s . -p "*_test.py -v"'
-                sh 'python3 -m robot test.robot'
+                sh 'robot test.robot'
             }
         }
         stage('push'){
             agent {
-                label 'pre-prod'
+                label 'test'
             }
             steps{
                 echo 'pushing the project'
-                sh 'docker build -t registry.gitlab.com/somearthzaza/flask_sdpx .'
-                sh 'docker push registry.gitlab.com/somearthzaza/flask_sdpx'
                 sh 'docker-compose -f docker-compose.yml down'
                 sh 'docker image prune -f'
+                sh 'docker system prune -a -f'
+                sh 'docker build -t registry.gitlab.com/somearthzaza/flask_sdpx .'
+                sh 'docker push registry.gitlab.com/somearthzaza/flask_sdpx'
+                
             }
     
         }
-        // stage('pull'){
-        //     agent {
-        //         label 'pre-prod'
-        //     }
-        //     steps{
-        //         echo 'pulling the project'
-        //         sh 'docker pull registry.gitlab.com/somearthzaza/flask_sdpx'
-        //     }
-        // }
-        // stage('run'){
-        //     agent{
-        //         label 'pre-prod'
-        //     }
-        //     steps{
-        //         echo 'running the project'
-        //         sh 'docker run -d -p 5000:5000 registry.gitlab.com/somearthzaza/flask_sdpx'
-        //     }
-        // }
+        stage('pull'){
+            agent {
+                label 'pre-prod'
+            }
+            steps{
+                echo 'pulling the project'
+                sh 'docker pull registry.gitlab.com/somearthzaza/flask_sdpx'
+            }
+        }
+        stage('run'){
+            agent{
+                label 'pre-prod'
+            }
+            steps{
+                echo 'running the project'
+                sh 'docker run -d -p 5000:5000 registry.gitlab.com/somearthzaza/flask_sdpx'
+            }
+        }
     }
 }
