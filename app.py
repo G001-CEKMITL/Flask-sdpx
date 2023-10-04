@@ -24,7 +24,7 @@ mysql.init_app(app)
 
 @app.route('/test')
 def hello_world():
-    return "test"
+    return "test1"
 
 
 @app.route('/users', methods=['GET'])
