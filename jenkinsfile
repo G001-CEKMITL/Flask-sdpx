@@ -8,7 +8,6 @@ pipeline{
             }
             steps{
                 echo 'building the project'
-                sh 'docker image prune -f'
                 sh 'touch dev.env'
                 sh 'echo "MYSQL_DB_USER = admin" >> dev.env'
                 sh 'echo "MYSQL_DB_PASSWORD = db4dev$" >> dev.env'
@@ -35,6 +34,7 @@ pipeline{
                 echo 'pushing the project'
                 sh 'docker build -t registry.gitlab.com/somearthzaza/flask_sdpx .'
                 sh 'docker push registry.gitlab.com/somearthzaza/flask_sdpx'
+                sh 'docker image prune -f'
             }
     
         }
