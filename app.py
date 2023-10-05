@@ -21,7 +21,7 @@ app.config['MYSQL_DATABASE_HOST'] = os.getenv('MYSQL_DB_HOST')
 mysql = MySQL()
 mysql.init_app(app)
 
-
+#this is test work 
 @app.route('/test')
 def hello_world():
     return "test3"
